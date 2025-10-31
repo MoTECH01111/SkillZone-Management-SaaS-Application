@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_31_105642) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_31_155324) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -50,6 +50,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_31_105642) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.date "expiry_date"
     t.index ["course_id"], name: "index_certificates_on_course_id"
     t.index ["employee_id"], name: "index_certificates_on_employee_id"
   end
@@ -62,6 +64,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_31_105642) do
     t.integer "capacity"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "start_date"
+    t.date "end_date"
   end
 
   create_table "employees", force: :cascade do |t|
@@ -87,6 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_31_105642) do
     t.string "grade"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "progress"
     t.index ["course_id"], name: "index_enrollments_on_course_id"
     t.index ["employee_id"], name: "index_enrollments_on_employee_id"
   end
