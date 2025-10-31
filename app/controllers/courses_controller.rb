@@ -1,34 +1,39 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :update, :destroy]
+  before_action :set_course, only: [:show, :edit, :update, :destroy]
+  before_action :require_admin, except: [:index, :show]  # only admin can modify
 
   def index
-    render json: Course.all
+    @courses = Course.all
   end
 
-  def show
-    render json: @course
+  def show; end
+
+  def new
+    @course = Course.new
   end
 
   def create
     @course = Course.new(course_params)
     if @course.save
-      render json: @course, status: :created
+      redirect_to @course, notice: 'Course created successfully.'
     else
-      render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
+  def edit; end
+
   def update
     if @course.update(course_params)
-      render json: @course
+      redirect_to @course, notice: 'Course updated successfully.'
     else
-      render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
     @course.destroy
-    render json: { message: "Course deleted" }
+    redirect_to courses_url, notice: 'Course deleted successfully.'
   end
 
   private
@@ -38,6 +43,13 @@ class CoursesController < ApplicationController
   end
 
   def course_params
-    params.require(:course).permit(:title, :description, :category, :duration, :level, :start_date, :end_date)
+    params.require(:course).permit(:title, :duration_minutes, :capacity, :start_date, :end_date)
   end
-end
+
+  # Restrict admin-only actions
+  def require_admin
+    # current_employee comes from your authentication system
+    unless current_employee&.admin?
+      redirect_to courses_path, alert: 'Access denied. Admins only.'
+    end
+  end
