@@ -1,0 +1,17 @@
+ruby_course:
+  title: "Ruby Programming"
+  description: "Learn Ruby from scratch"
+  duration_minutes: 120
+  level: "Beginner"
+  capacity: 30
+  start_date: 2025-11-01
+  end_date: 2025-11-30
+
+js_course:
+  title: "JavaScript Essentials"
+  description: "Learn JS basics and DOM manipulation"
+  duration_minutes: 90
+  level: "Beginner"
+  capacity: 25
+  start_date: 2025-11-05
+  end_date: 2025-11-25

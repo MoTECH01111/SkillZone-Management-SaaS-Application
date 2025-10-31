@@ -1,0 +1,20 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+certificate_morris_ruby:
+  employee: morris
+  course: ruby_course
+  name: "Ruby Basics Completion"
+  issued_on: 2025-10-30   
+  expiry_date: 2026-10-30
+  issuer: SkillZone
+  notes: "Completed with distinction"
+
+
+certificate_alice_js:
+  employee: alice
+  course: js_course
+  name: "JavaScript Basics Completion"
+  issued_on: 2025-11-15
+  expiry_date: 2026-11-15
+  issuer: SkillZone
+  notes: "Good performance"

@@ -1,0 +1,19 @@
+morris:
+  first_name: "Morris"
+  last_name: "Ouedraogo"
+  email: "morris@example.com"
+  position: "Engineer"
+  department: "Software"
+  phone: "+353871234567"
+  hire_date: 2024-09-01
+  gender: "Male"
+
+alice:
+  first_name: "Alice"
+  last_name: "Smith"
+  email: "alice@example.com"
+  position: "Intern"
+  department: "IT"
+  phone: "0877654321"
+  hire_date: 2024-09-15
+  gender: "Female"

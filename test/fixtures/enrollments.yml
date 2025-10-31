@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+enrollment_morris_ruby:
+  employee: morris
+  course: ruby_course
+  status: active
+  progress: 80
+  enrolled_on: 2025-10-31
+  completed_on: 2025-11-01
+  grade: A
+
+enrollment_alice_js:
+  employee: alice
+  course: js_course
+  status: active
+  progress: 100
+  enrolled_on: 2025-10-31
+  completed_on: 2025-11-15
+  grade: B
