@@ -18,3 +18,11 @@ certificate_alice_js:
   expiry_date: 2026-11-15
   issuer: SkillZone
   notes: "Good performance"
+
+
+ruby_certificate:
+  name: "Ruby Course Completion"
+  issued_on: <%= Date.today - 1.week %>
+  expiry_date: <%= Date.today + 1.year %>
+  employee: manager   # reference fixture key from employees.yml
+  course: sample_course

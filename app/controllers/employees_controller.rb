@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
   before_action :set_employee, only: [:show, :edit, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]  # only admins can modify employees
+  before_action :require_admin, except: [:index, :show] # only admins can modify employees
 
   # GET /employees
   def index
@@ -8,7 +8,8 @@ class EmployeesController < ApplicationController
   end
 
   # GET /employees/:id
-  def show; end
+  def show
+  end
 
   # GET /employees/new
   def new
@@ -19,19 +20,20 @@ class EmployeesController < ApplicationController
   def create
     @employee = Employee.new(employee_params)
     if @employee.save
-      redirect_to @employee, notice: 'Employee was successfully created.'
+      redirect_to @employee, notice: "Employee was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
   end
 
   # GET /employees/:id/edit
-  def edit; end
+  def edit
+  end
 
   # PATCH/PUT /employees/:id
   def update
     if @employee.update(employee_params)
-      redirect_to @employee, notice: 'Employee was successfully updated.'
+      redirect_to @employee, notice: "Employee was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -40,7 +42,7 @@ class EmployeesController < ApplicationController
   # DELETE /employees/:id
   def destroy
     @employee.destroy
-    redirect_to employees_url, notice: 'Employee was successfully deleted.'
+    redirect_to employees_path, notice: "Employee was successfully deleted."
   end
 
   private
@@ -61,7 +63,12 @@ class EmployeesController < ApplicationController
   # Restrict admin-only actions
   def require_admin
     unless current_employee&.admin?
-      redirect_to employees_path, alert: 'Access denied. Admins only.'
+      redirect_to employees_path, alert: "Access denied. Admins only."
     end
+  end
+
+  # Allow current_employee to be stubbed in tests
+  def current_employee
+    @current_employee ||= super if defined?(super)
   end
 end

@@ -43,7 +43,7 @@ class CoursesController < ApplicationController
   end
 
   def course_params
-    params.require(:course).permit(:title, :duration_minutes, :capacity, :start_date, :end_date)
+    params.require(:course).permit(:title, :duration_minutes, :capacity, :level, :start_date, :end_date)
   end
 
   # Restrict admin-only actions

@@ -17,3 +17,36 @@ alice:
   phone: "0877654321"
   hire_date: 2024-09-15
   gender: "Female"
+
+
+manager:
+  first_name: "Alice"
+  last_name: "Manager"
+  email: "alice.manager@example.com"
+  phone: "1234567890"
+  position: "Manager"
+  department: "HR"
+  gender: "Female"
+  hire_date: <%= Date.today - 2.years %>
+  is_admin: true
+
+developer:
+  first_name: "Bob"
+  last_name: "Developer"
+  email: "bob.developer@example.com"
+  phone: "0987654321"
+  position: "Developer"
+  department: "IT"
+  gender: "Male"
+  hire_date: <%= Date.today - 1.year %>
+  is_admin: false
+
+john:
+  first_name: "John"
+  last_name: "King"
+  email: "JohnKing@example.com"
+  position: "Engineer"
+  department: "Software"
+  phone: "+353875734567"
+  hire_date: 2023-09-01
+  gender: "Male"
