@@ -1,24 +1,14 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+SkillZONE SAAS – Employee Training & Certification Management System
 
-* Ruby version
+ Overview:
+  A SaaS application for organisations to track employee skills, training sessions, and certifications. Admins can add training programs, employees can enrol, complete courses, and   upload certificates.
 
-* System dependencies
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+ Core Features CRUD FUNCTION:
+  * Employees: Add, edit, delete employee records.
+  * Training Courses: Create, update, delete, and list courses.
+  * Enrolment’s: Employees enrols in courses (link between Employee & Course models).
+  * Certificates: Upload and manage proof of completion  Active Storage.
