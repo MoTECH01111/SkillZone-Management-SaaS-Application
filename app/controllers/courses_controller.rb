@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]
+  before_action :set_course, only: [ :show, :update, :destroy ]
+  before_action :require_admin, except: [ :index, :show ]
 
   # GET /courses
   def index

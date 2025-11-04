@@ -1,16 +1,16 @@
 class EnrollmentsController < ApplicationController
-  before_action :set_enrollment, only: [:show, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]  # Only admins can modify
+  before_action :set_enrollment, only: [ :show, :update, :destroy ]
+  before_action :require_admin, except: [ :index, :show ]  # Only admins can modify
 
   # GET /enrollments
   def index
     @enrollments = Enrollment.includes(:employee, :course).all
     render json: @enrollments.as_json(
       include: {
-        employee: { only: [:id, :first_name, :last_name, :email] },
-        course: { only: [:id, :title, :description] }
+        employee: { only: [ :id, :first_name, :last_name, :email ] },
+        course: { only: [ :id, :title, :description ] }
       },
-      except: [:created_at, :updated_at]
+      except: [ :created_at, :updated_at ]
     )
   end
 
@@ -18,10 +18,10 @@ class EnrollmentsController < ApplicationController
   def show
     render json: @enrollment.as_json(
       include: {
-        employee: { only: [:id, :first_name, :last_name, :email] },
-        course: { only: [:id, :title, :description] }
+        employee: { only: [ :id, :first_name, :last_name, :email ] },
+        course: { only: [ :id, :title, :description ] }
       },
-      except: [:created_at, :updated_at]
+      except: [ :created_at, :updated_at ]
     )
   end
 
@@ -31,8 +31,8 @@ class EnrollmentsController < ApplicationController
     if @enrollment.save
       render json: @enrollment.as_json(
         include: {
-          employee: { only: [:id, :first_name, :last_name, :email] },
-          course: { only: [:id, :title, :description] }
+          employee: { only: [ :id, :first_name, :last_name, :email ] },
+          course: { only: [ :id, :title, :description ] }
         }
       ), status: :created
     else
@@ -45,8 +45,8 @@ class EnrollmentsController < ApplicationController
     if @enrollment.update(enrollment_params)
       render json: @enrollment.as_json(
         include: {
-          employee: { only: [:id, :first_name, :last_name, :email] },
-          course: { only: [:id, :title, :description] }
+          employee: { only: [ :id, :first_name, :last_name, :email ] },
+          course: { only: [ :id, :title, :description ] }
         }
       ), status: :ok
     else

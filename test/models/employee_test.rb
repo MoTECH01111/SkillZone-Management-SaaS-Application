@@ -72,7 +72,7 @@ class EmployeeTest < ActiveSupport::TestCase
   test "gender must be valid" do
     @employee.gender = "Unknown"
     assert_not @employee.valid?
-    ["Male", "Female", "Other"].each do |g|
+    [ "Male", "Female", "Other" ].each do |g|
       @employee.gender = g
       assert @employee.valid?, "#{g} should be valid"
     end

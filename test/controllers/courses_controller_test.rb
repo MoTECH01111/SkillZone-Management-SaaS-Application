@@ -76,7 +76,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest
   # NON-ADMIN ACCESS
   test "non-admin should be forbidden" do
     CoursesController.any_instance.stubs(:current_employee).returns(@user)
-    
+
     # Create attempt
     post courses_url, params: { course: { title: "Test" } }, as: :json
     assert_response :forbidden

@@ -46,10 +46,10 @@ class EmployeesControllerTest < ActionDispatch::IntegrationTest
   test "should create employee as admin" do
     login_as(@admin)
     assert_difference("Employee.count", 1) do
-      post employees_url, params: { employee: { 
-        first_name: "Test", last_name: "User", email: "testuser@example.com", 
-        phone: "1234567890", position: "Developer", department: "IT", 
-        gender: "Male", hire_date: Date.today 
+      post employees_url, params: { employee: {
+        first_name: "Test", last_name: "User", email: "testuser@example.com",
+        phone: "1234567890", position: "Developer", department: "IT",
+        gender: "Male", hire_date: Date.today
       } }, as: :json
     end
     assert_response :created

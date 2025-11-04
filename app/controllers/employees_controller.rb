@@ -1,6 +1,6 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]
+  before_action :set_employee, only: [ :show, :update, :destroy ]
+  before_action :require_admin, except: [ :index, :show ]
 
   # GET /employees
   def index

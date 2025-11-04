@@ -64,4 +64,3 @@ class CourseTest < ActiveSupport::TestCase
     assert @course.valid?, "End date equal to start date should be valid"
   end
 end
-

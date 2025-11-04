@@ -1,16 +1,16 @@
 class CertificatesController < ApplicationController
-  before_action :set_certificate, only: [:show, :update, :destroy]
+  before_action :set_certificate, only: [ :show, :update, :destroy ]
   before_action :require_admin
 
   # GET /certificates
   def index
     @certificates = Certificate.includes(:employee, :course)
-    render json: @certificates.as_json(include: [:employee, :course])
+    render json: @certificates.as_json(include: [ :employee, :course ])
   end
 
   # GET /certificates/:id
   def show
-    render json: @certificate.as_json(include: [:employee, :course])
+    render json: @certificate.as_json(include: [ :employee, :course ])
   end
 
   # POST /certificates
@@ -59,7 +59,7 @@ class CertificatesController < ApplicationController
 
   def require_admin
     unless current_employee&.admin?
-      render json: { error: 'Access denied. Admins only.' }, status: :forbidden
+      render json: { error: "Access denied. Admins only." }, status: :forbidden
     end
   end
 end
