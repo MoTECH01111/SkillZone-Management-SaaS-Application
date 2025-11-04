@@ -1,58 +1,51 @@
 class EmployeesController < ApplicationController
-  before_action :set_employee, only: [:show, :edit, :update, :destroy]
-  before_action :require_admin, except: [:index, :show] # only admins can modify employees
+  before_action :set_employee, only: [:show, :update, :destroy]
+  before_action :require_admin, except: [:index, :show]
 
   # GET /employees
   def index
-    @employees = Employee.all
+    employees = Employee.all
+    render json: employees, status: :ok
   end
 
   # GET /employees/:id
   def show
-  end
-
-  # GET /employees/new
-  def new
-    @employee = Employee.new
+    render json: @employee, status: :ok
   end
 
   # POST /employees
   def create
-    @employee = Employee.new(employee_params)
-    if @employee.save
-      redirect_to @employee, notice: "Employee was successfully created."
+    employee = Employee.new(employee_params)
+    if employee.save
+      render json: employee, status: :created
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: employee.errors.full_messages }, status: :unprocessable_entity
     end
-  end
-
-  # GET /employees/:id/edit
-  def edit
   end
 
   # PATCH/PUT /employees/:id
   def update
     if @employee.update(employee_params)
-      redirect_to @employee, notice: "Employee was successfully updated."
+      render json: @employee, status: :ok
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @employee.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   # DELETE /employees/:id
   def destroy
     @employee.destroy
-    redirect_to employees_path, notice: "Employee was successfully deleted."
+    head :no_content
   end
 
   private
 
-  # Set the employee for show, edit, update, destroy
+  # Set the employee for show, update, destroy
   def set_employee
     @employee = Employee.find(params[:id])
   end
 
-  # Strong parameters for employee
+  # Strong parameters
   def employee_params
     params.require(:employee).permit(
       :first_name, :last_name, :email, :phone, :position,
@@ -63,7 +56,7 @@ class EmployeesController < ApplicationController
   # Restrict admin-only actions
   def require_admin
     unless current_employee&.admin?
-      redirect_to employees_path, alert: "Access denied. Admins only."
+      render json: { error: "Access denied. Admins only." }, status: :forbidden
     end
   end
 
