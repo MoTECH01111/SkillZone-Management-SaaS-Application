@@ -1,4 +1,7 @@
 class Course < ApplicationRecord
+  # Associations
+  has_many :certificates, dependent: :destroy
+
   # VALIDATIONS
   validates :title, presence: true
   validates :duration_minutes, numericality: { greater_than: 0 }

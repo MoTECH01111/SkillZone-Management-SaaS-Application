@@ -1,39 +1,41 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :edit, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]  # only admin can modify
+  before_action :set_course, only: [:show, :update, :destroy]
+  before_action :require_admin, except: [:index, :show]
 
+  # GET /courses
   def index
-    @courses = Course.all
+    courses = Course.all
+    render json: courses, status: :ok
   end
 
-  def show; end
-
-  def new
-    @course = Course.new
+  # GET /courses/:id
+  def show
+    render json: @course, status: :ok
   end
 
+  # POST /courses
   def create
-    @course = Course.new(course_params)
-    if @course.save
-      redirect_to @course, notice: 'Course created successfully.'
+    course = Course.new(course_params)
+    if course.save
+      render json: course, status: :created
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: course.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  def edit; end
-
+  # PATCH /PUT /courses/:id
   def update
     if @course.update(course_params)
-      redirect_to @course, notice: 'Course updated successfully.'
+      render json: @course, status: :ok
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
+  # DELETE /courses/:id
   def destroy
     @course.destroy
-    redirect_to courses_url, notice: 'Course deleted successfully.'
+    head :no_content
   end
 
   private
@@ -46,10 +48,9 @@ class CoursesController < ApplicationController
     params.require(:course).permit(:title, :duration_minutes, :capacity, :level, :start_date, :end_date)
   end
 
-  # Restrict admin-only actions
   def require_admin
-    # current_employee comes from your authentication system
     unless current_employee&.admin?
-      redirect_to courses_path, alert: 'Access denied. Admins only.'
+      render json: { error: "Access denied. Admins only." }, status: :forbidden
     end
   end
+end
