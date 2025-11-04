@@ -8,7 +8,7 @@ SkillZONE SAAS – Employee Training & Certification Management System
 
 
  Core Features CRUD FUNCTION:
-  * Employees: Add, edit, delete employee records.
+  * Admins: Add, edit, delete employee records.
   * Training Courses: Create, update, delete, and list courses.
-  * Enrolment’s: Employees enrols in courses (link between Employee & Course models).
+  * Enrolment’s: Employees enrols in courses link between Employee & Course models.
   * Certificates: Upload and manage proof of completion  Active Storage.
