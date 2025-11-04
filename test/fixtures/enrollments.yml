@@ -20,3 +20,18 @@ enrollment_alice_js:
 
 
 
+# Active enrollment 
+active_enrollment:
+  employee: john
+  course: sample_course
+  status: active
+  progress: 75
+  completed_on:
+
+# Completed enrollment
+completed_enrollment:
+  employee: manager
+  course: sample_course
+  status: completed
+  progress: 100
+  completed_on: <%= Date.today - 5.days %>

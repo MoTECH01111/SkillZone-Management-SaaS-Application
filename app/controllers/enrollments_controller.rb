@@ -1,57 +1,71 @@
 class EnrollmentsController < ApplicationController
-  before_action :set_enrollment, only: [:show, :edit, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]  # only admins can modify
+  before_action :set_enrollment, only: [:show, :update, :destroy]
+  before_action :require_admin, except: [:index, :show]  # Only admins can modify
 
   # GET /enrollments
   def index
-    @enrollments = Enrollment.includes(:employee, :course)
+    @enrollments = Enrollment.includes(:employee, :course).all
+    render json: @enrollments.as_json(
+      include: {
+        employee: { only: [:id, :first_name, :last_name, :email] },
+        course: { only: [:id, :title, :description] }
+      },
+      except: [:created_at, :updated_at]
+    )
   end
 
   # GET /enrollments/:id
-  def show; end
-
-  # GET /enrollments/new
-  def new
-    @enrollment = Enrollment.new
-    @employees = Employee.all
-    @courses = Course.all
+  def show
+    render json: @enrollment.as_json(
+      include: {
+        employee: { only: [:id, :first_name, :last_name, :email] },
+        course: { only: [:id, :title, :description] }
+      },
+      except: [:created_at, :updated_at]
+    )
   end
 
   # POST /enrollments
   def create
     @enrollment = Enrollment.new(enrollment_params)
     if @enrollment.save
-      redirect_to @enrollment, notice: 'Enrollment created successfully.'
+      render json: @enrollment.as_json(
+        include: {
+          employee: { only: [:id, :first_name, :last_name, :email] },
+          course: { only: [:id, :title, :description] }
+        }
+      ), status: :created
     else
-      render :new, status: :unprocessable_entity
+      render json: { errors: @enrollment.errors.full_messages }, status: :unprocessable_entity
     end
-  end
-
-  # GET /enrollments/:id/edit
-  def edit
-    @employees = Employee.all
-    @courses = Course.all
   end
 
   # PATCH/PUT /enrollments/:id
   def update
     if @enrollment.update(enrollment_params)
-      redirect_to @enrollment, notice: 'Enrollment updated successfully.'
+      render json: @enrollment.as_json(
+        include: {
+          employee: { only: [:id, :first_name, :last_name, :email] },
+          course: { only: [:id, :title, :description] }
+        }
+      ), status: :ok
     else
-      render :edit, status: :unprocessable_entity
+      render json: { errors: @enrollment.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   # DELETE /enrollments/:id
   def destroy
     @enrollment.destroy
-    redirect_to enrollments_url, notice: 'Enrollment deleted successfully.'
+    head :no_content
   end
 
   private
 
   def set_enrollment
     @enrollment = Enrollment.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render json: { error: "Enrollment not found" }, status: :not_found
   end
 
   def enrollment_params
@@ -61,7 +75,7 @@ class EnrollmentsController < ApplicationController
   # Restrict admin-only actions
   def require_admin
     unless current_employee&.admin?
-      redirect_to enrollments_path, alert: 'Access denied. Admins only.'
+      render json: { error: "Access denied. Admins only." }, status: :forbidden
     end
   end
 end
