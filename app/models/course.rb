@@ -1,5 +1,6 @@
 class Course < ApplicationRecord
   # Associations
+  has_many :enrollments, dependent: :destroy
   has_many :certificates, dependent: :destroy
 
   # VALIDATIONS
