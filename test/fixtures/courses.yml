@@ -25,3 +25,13 @@ sample_course:
   capacity: 20
   start_date: <%= Date.today - 1.month %>
   end_date: <%= Date.today + 1.month %>
+
+
+new_course:
+  title: "New Test Course"
+  description: "Fresh course for create enrollment tests."
+  duration_minutes: 120
+  level: "Beginner"
+  capacity: 20
+  start_date: <%= Date.today - 1.month %>
+  end_date: <%= Date.today + 1.month %>

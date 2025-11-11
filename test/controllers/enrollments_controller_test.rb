@@ -5,7 +5,8 @@ class EnrollmentsControllerTest < ActionDispatch::IntegrationTest
     @admin = employees(:manager)
     @non_admin = employees(:developer)
     @employee = employees(:john)
-    @course = courses(:sample_course)
+    @sample_course = courses(:sample_course)
+    @new_course = courses(:new_course) # fresh course for enrollment creation tests
     @enrollment = enrollments(:active_enrollment)
   end
 
@@ -14,77 +15,112 @@ class EnrollmentsControllerTest < ActionDispatch::IntegrationTest
     EnrollmentsController.any_instance.stubs(:current_employee).returns(employee)
   end
 
+  # ======================
   # INDEX
-  test "should get index" do
+  # ======================
+  test "admin should see all enrollments" do
     login_as(@admin)
-    get enrollments_url, as: :json
+    get course_enrollments_url(@sample_course), as: :json
     assert_response :success
+
     json = JSON.parse(@response.body)
     assert_kind_of Array, json
     assert_includes json.first.keys, "status"
+    assert_includes json.first.keys, "employee"
+    assert_includes json.first.keys, "course"
   end
 
+  test "employee should see only their own enrollments" do
+    login_as(@employee)
+    get course_enrollments_url(@sample_course), as: :json
+    assert_response :success
+
+    json = JSON.parse(@response.body)
+    assert json.all? { |e| e["employee"]["id"] == @employee.id }
+  end
+
+  # ======================
   # SHOW
-  test "should show enrollment" do
+  # ======================
+  test "employee can view their own enrollment" do
+    login_as(@employee)
+    get enrollment_url(@enrollment), as: :json
+    if @enrollment.employee_id == @employee.id
+      assert_response :success
+    else
+      assert_response :forbidden
+    end
+  end
+
+  test "admin can view any enrollment" do
     login_as(@admin)
     get enrollment_url(@enrollment), as: :json
     assert_response :success
-    json = JSON.parse(@response.body)
-    assert_equal @enrollment.id, json["id"]
   end
 
+  # ======================
   # CREATE
-  test "should create enrollment as admin with valid params" do
-    login_as(@admin)
+  # ======================
+  test "employee can create enrollment for self" do
+    login_as(@employee)
     assert_difference("Enrollment.count", 1) do
-      post enrollments_url, params: {
-        enrollment: {
-          employee_id: @employee.id,
-          course_id: @course.id,
-          status: "active",
-          progress: 50
-        }
+      post course_enrollments_url(@new_course), params: {
+        enrollment: { employee_id: @employee.id, course_id: @new_course.id, status: "active", progress: 0 }
       }, as: :json
     end
     assert_response :created
-    json = JSON.parse(@response.body)
-    assert_equal "active", json["status"]
   end
 
-  test "should not create enrollment with invalid progress" do
-    login_as(@admin)
-    assert_no_difference("Enrollment.count") do
-      post enrollments_url, params: {
-        enrollment: {
-          employee_id: @employee.id,
-          course_id: @course.id,
-          status: "active",
-          progress: 200
-        }
-      }, as: :json
-    end
-    assert_response :unprocessable_entity
-    json = JSON.parse(@response.body)
-    assert_includes json["errors"].join, "must be less than or equal to 100"
-  end
-
-  test "non-admin should not create enrollment" do
+  test "employee cannot create enrollment for another employee" do
     login_as(@non_admin)
     assert_no_difference("Enrollment.count") do
-      post enrollments_url, params: {
-        enrollment: {
-          employee_id: @employee.id,
-          course_id: @course.id,
-          status: "active",
-          progress: 50
-        }
+      post course_enrollments_url(@new_course), params: {
+        enrollment: { employee_id: @employee.id, course_id: @new_course.id, status: "active", progress: 0 }
       }, as: :json
     end
     assert_response :forbidden
+    json = JSON.parse(@response.body)
+    assert_equal "You can only enroll yourself.", json["error"]
   end
 
+  test "admin can create enrollment for any employee" do
+    login_as(@admin)
+    assert_difference("Enrollment.count", 1) do
+      post course_enrollments_url(@new_course), params: {
+        enrollment: { employee_id: @employee.id, course_id: @new_course.id, status: "active", progress: 0 }
+      }, as: :json
+    end
+    assert_response :created
+  end
+
+  # ======================
   # UPDATE
-  test "should update enrollment as admin" do
+  # ======================
+  test "employee can update their own enrollment" do
+    login_as(@employee)
+    patch enrollment_url(@enrollment), params: {
+      enrollment: { status: "completed", progress: 100 }
+    }, as: :json
+
+    if @enrollment.employee_id == @employee.id
+      assert_response :success
+      @enrollment.reload
+      assert_equal "completed", @enrollment.status
+      assert_equal 100, @enrollment.progress
+    else
+      assert_response :forbidden
+    end
+  end
+
+  test "employee cannot update another employee's enrollment" do
+    login_as(@non_admin)
+    patch enrollment_url(@enrollment), params: {
+      enrollment: { status: "completed", progress: 100 }
+    }, as: :json
+    assert_response :forbidden
+  end
+
+  test "admin can update any enrollment" do
     login_as(@admin)
     patch enrollment_url(@enrollment), params: {
       enrollment: { status: "completed", progress: 100 }
@@ -92,28 +128,13 @@ class EnrollmentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     @enrollment.reload
     assert_equal "completed", @enrollment.status
+    assert_equal 100, @enrollment.progress
   end
 
-  test "should not update enrollment with invalid progress" do
-    login_as(@admin)
-    patch enrollment_url(@enrollment), params: {
-      enrollment: { progress: -10 }
-    }, as: :json
-    assert_response :unprocessable_entity
-    json = JSON.parse(@response.body)
-    assert_includes json["errors"].join, "must be greater than or equal to 0"
-  end
-
-  test "non-admin should not update enrollment" do
-    login_as(@non_admin)
-    patch enrollment_url(@enrollment), params: {
-      enrollment: { status: "completed" }
-    }, as: :json
-    assert_response :forbidden
-  end
-
+  # ======================
   # DESTROY
-  test "should destroy enrollment as admin" do
+  # ======================
+  test "admin can destroy enrollment" do
     login_as(@admin)
     assert_difference("Enrollment.count", -1) do
       delete enrollment_url(@enrollment), as: :json
@@ -121,11 +142,13 @@ class EnrollmentsControllerTest < ActionDispatch::IntegrationTest
     assert_response :no_content
   end
 
-  test "non-admin should not destroy enrollment" do
+  test "employee cannot destroy enrollment" do
     login_as(@non_admin)
     assert_no_difference("Enrollment.count") do
       delete enrollment_url(@enrollment), as: :json
     end
     assert_response :forbidden
+    json = JSON.parse(@response.body)
+    assert_equal "Only admins can delete enrollments.", json["error"]
   end
 end

@@ -1,10 +1,10 @@
 class Employee < ApplicationRecord
-  # ASSOCIATIONS
+  #  ASSOCIATIONS
   has_many :enrollments, dependent: :destroy
   has_many :courses, through: :enrollments
   has_many :certificates, dependent: :destroy
 
-  # CALLBACKS
+  #  CALLBACKS
   before_save :set_admin_based_on_position
 
   # VALIDATIONS
@@ -19,13 +19,20 @@ class Employee < ApplicationRecord
   validates :gender, inclusion: { in: %w[Male Female Other], message: "%{value} is not a valid gender" }
   validates :hire_date, presence: true, comparison: { less_than_or_equal_to: Date.today }
 
-  # CALLBACK METHODS
+  # METHODS 
+
+  # Automatically sets admin privileges based on position
   def set_admin_based_on_position
-    self.is_admin = position&.casecmp("manager")&.zero? || false
+    self.is_admin = position.to_s.downcase == "manager"
   end
 
-  # HELPER METHOD
+  # Helper method for easy role checking
   def admin?
     is_admin
+  end
+
+  # Convenience method for displaying full name
+  def full_name
+    "#{first_name} #{last_name}"
   end
 end

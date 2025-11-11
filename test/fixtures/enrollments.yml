@@ -1,5 +1,20 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+# Active enrollment
+active_enrollment:
+  employee: john
+  course: sample_course
+  status: active
+  progress: 75
+  completed_on:
 
+# Completed enrollment
+completed_enrollment:
+  employee: manager
+  course: sample_course
+  status: completed
+  progress: 100
+  completed_on: <%= Date.today - 5.days %>
+
+# Additional enrollments
 enrollment_morris_ruby:
   employee: morris
   course: ruby_course
@@ -17,21 +32,3 @@ enrollment_alice_js:
   enrolled_on: 2025-10-31
   completed_on: 2025-11-15
   grade: B
-
-
-
-# Active enrollment 
-active_enrollment:
-  employee: john
-  course: sample_course
-  status: active
-  progress: 75
-  completed_on:
-
-# Completed enrollment
-completed_enrollment:
-  employee: manager
-  course: sample_course
-  status: completed
-  progress: 100
-  completed_on: <%= Date.today - 5.days %>

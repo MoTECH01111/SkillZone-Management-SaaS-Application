@@ -112,4 +112,18 @@ class CertificatesControllerTest < ActionDispatch::IntegrationTest
     delete certificate_url(@certificate), as: :json
     assert_response :forbidden
   end
+
+  test "non-admin should get index" do
+    login_as(@non_admin)
+    get certificates_url, as: :json
+    assert_response :success
+    assert_includes @response.body, @certificate.name
+  end
+
+  test "non-admin should show certificate" do
+    login_as(@non_admin)
+    get certificate_url(@certificate), as: :json
+    assert_response :success
+    assert_includes @response.body, @certificate.name
+  end
 end

@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: [ :show, :update, :destroy ]
-  before_action :require_admin, except: [ :index, :show ]
+  before_action :set_course, only: [:show, :update, :destroy, :enroll]
+  before_action :require_admin, except: [:index, :show, :enroll]
 
   # GET /courses
   def index
@@ -23,7 +23,7 @@ class CoursesController < ApplicationController
     end
   end
 
-  # PATCH /PUT /courses/:id
+  # PATCH/PUT /courses/:id
   def update
     if @course.update(course_params)
       render json: @course, status: :ok
@@ -36,6 +36,23 @@ class CoursesController < ApplicationController
   def destroy
     @course.destroy
     head :no_content
+  end
+
+  # POST /courses/:id/enroll
+  def enroll
+    # Ensure only employees (non-admins) can enroll
+    if current_employee&.admin?
+      render json: { error: "Admins cannot enroll in courses." }, status: :forbidden
+      return
+    end
+
+    enrollment = Enrollment.new(employee_id: current_employee.id, course_id: @course.id)
+
+    if enrollment.save
+      render json: { message: "Successfully enrolled in #{@course.title}" }, status: :created
+    else
+      render json: { errors: enrollment.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   private
