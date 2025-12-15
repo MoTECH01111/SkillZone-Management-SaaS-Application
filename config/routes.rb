@@ -4,7 +4,7 @@ Rails.application.routes.draw do #Defines all HTTP routes
 
   # Creates the standard routes index, show, create,update,destroy
   resources :employees do
-    collection do.   # Creates a custom collection Route
+    collection do   # Creates a custom collection Route
       post :login
     end
   end
