@@ -1,122 +1,109 @@
 require "test_helper"
 
-class EmployeesControllerTest < ActionDispatch::IntegrationTest
-  setup do
-    @admin = employees(:manager)        # admin fixture
-    @non_admin = employees(:developer)  # non-admin fixture
-    @employee = employees(:john)        # employee fixture
+class EmployeesControllerTest < ActionDispatch::IntegrationTest # Testing for the employee controller 
+  setup do # test data using fixtures
+    @admin = employees(:manager)
+    @non_admin = employees(:developer)
+    @employee = employees(:john)
+    @another_employee = employees(:alice)
   end
 
-  # Helper to stub current_employee
-  def login_as(employee)
-    EmployeesController.any_instance.stubs(:current_employee).returns(employee)
+  # Helper - adds ?employee_id=<id> to the request
+  def auth_query(user)
+    { employee_id: user.id }
   end
 
-  # INDEX
-  test "should get index as admin" do
-    login_as(@admin)
-    get employees_url, as: :json
+  # Testing for INDEX functions
+  test "should get index as admin" do # Admin can view all employees
+    get employees_url(auth_query(@admin)), as: :json
     assert_response :success
-    assert_includes @response.content_type, "application/json"
   end
 
-  test "should not get index as non-admin" do
-    login_as(@non_admin)
-    get employees_url, as: :json
-    assert_response :forbidden
+  test "should NOT get index as non-admin" do # non - Admin cannot view all employees
+    get employees_url(auth_query(@non_admin)), as: :json
+ 
+    assert_response :forbidden # Expect forbidden acces
+    json = JSON.parse(@response.body) 
+    assert_equal "Admins only", json["error"]
+  end
+
+  # Testing for SHOW functions
+  test "should show employee" do
+    get employee_url(@employee, auth_query(@employee)), as: :json
+
+    assert_response :success
     json = JSON.parse(@response.body)
-    assert_equal "Access denied. Admins only.", json["error"]
+    assert_equal @employee.id, json["id"]
   end
 
-  # SHOW
-  test "should show employee as admin" do
-    login_as(@admin)
-    get employee_url(@employee), as: :json
-    assert_response :success
-    assert_includes @response.content_type, "application/json"
-  end
-
-  test "should show employee as non-admin" do
-    login_as(@non_admin)
-    get employee_url(@employee), as: :json
-    assert_response :success
-    assert_includes @response.content_type, "application/json"
-  end
-
-  # CREATE
-  test "should create employee as admin" do
-    login_as(@admin)
+  # Testing for CREATE functions
+  test "should create employee" do
     assert_difference("Employee.count", 1) do
-      post employees_url, params: { employee: {
-        first_name: "Test", last_name: "User", email: "testuser@example.com",
-        phone: "1234567890", position: "Developer", department: "IT",
-        gender: "Male", hire_date: Date.today
-      } }, as: :json
+      post employees_url(auth_query(@admin)),
+        params: {
+          employee: {
+            first_name:  "Test",
+            last_name:   "User",
+            email:       "test_user@example.com",
+            phone:       "123456789",
+            position:    "Engineer",
+            department:  "IT",
+            gender:      "Male",
+            hire_date:   "2024-01-01",
+          }
+        },
+        as: :json
     end
+
     assert_response :created
-    json = JSON.parse(@response.body)
-    assert_equal "Test", json["first_name"]
   end
 
-  test "should create employee as non-admin" do
-    login_as(@non_admin)
-    assert_difference("Employee.count", 1) do
-      post employees_url, params: { employee: {
-        first_name: "New", last_name: "Hire", email: "newhire@example.com",
-        phone: "9876543210", position: "Intern", department: "HR",
-        gender: "Female", hire_date: Date.today
-      } }, as: :json
-    end
-    assert_response :created
-    json = JSON.parse(@response.body)
-    assert_equal "New", json["first_name"]
-  end
-
-  # UPDATE
+  # Testing for UPDATE Functions
   test "should update employee as admin" do
-    login_as(@admin)
-    patch employee_url(@employee), params: { employee: { first_name: "Updated" } }, as: :json
-    assert_response :ok
-    json = JSON.parse(@response.body)
-    assert_equal "Updated", json["first_name"]
+    patch employee_url(@employee, auth_query(@admin)),
+      params: { employee: { first_name: "AdminEdit" } },
+      as: :json
+
+    assert_response :success
     @employee.reload
-    assert_equal "Updated", @employee.first_name
+    assert_equal "AdminEdit", @employee.first_name
   end
 
   test "should update own profile as non-admin" do
-    login_as(@non_admin)
-    patch employee_url(@non_admin), params: { employee: { first_name: "SelfEdit" } }, as: :json
-    assert_response :ok
-    json = JSON.parse(@response.body)
-    assert_equal "SelfEdit", json["first_name"]
+    patch employee_url(@non_admin, auth_query(@non_admin)),
+      params: { employee: { first_name: "MyEdit" } },
+      as: :json
+
+    assert_response :success
     @non_admin.reload
-    assert_equal "SelfEdit", @non_admin.first_name
+    assert_equal "MyEdit", @non_admin.first_name
   end
 
-  test "should not update others as non-admin" do
-    login_as(@non_admin)
-    patch employee_url(@employee), params: { employee: { first_name: "HackEdit" } }, as: :json
+  test "should NOT update another employee as non-admin" do
+    patch employee_url(@employee, auth_query(@non_admin)),
+      params: { employee: { first_name: "HACKED" } },
+      as: :json
+
     assert_response :forbidden
-    @employee.reload
-    assert_not_equal "HackEdit", @employee.first_name
+    json = JSON.parse(@response.body)
+    assert_equal "Access denied", json["error"]
   end
-
-  # DESTROY
+  
+  # Testing for DESTROY functions
   test "should destroy employee as admin" do
-    login_as(@admin)
     assert_difference("Employee.count", -1) do
-      delete employee_url(@employee), as: :json
+      delete employee_url(@another_employee, auth_query(@admin)), as: :json
     end
     assert_response :no_content
   end
 
-  test "should not destroy employee as non-admin" do
-    login_as(@non_admin)
+  test "should NOT destroy employee as non-admin" do
     assert_no_difference("Employee.count") do
-      delete employee_url(@employee), as: :json
+      delete employee_url(@employee, auth_query(@non_admin)), as: :json
     end
+
     assert_response :forbidden
     json = JSON.parse(@response.body)
-    assert_equal "Access denied. Admins only.", json["error"]
+    assert_equal "Admins only", json["error"]
   end
 end

@@ -1,9 +1,9 @@
 require "test_helper"
 
-class EmployeeTest < ActiveSupport::TestCase
-  fixtures :employees
+class EmployeeTest < ActiveSupport::TestCase # Unit test for  employee model
+  fixtures :employees # Load the employee fixture
 
-  def setup
+  def setup # Set up test data using morris fixture
     @employee = employees(:morris)
   end
 
@@ -11,7 +11,7 @@ class EmployeeTest < ActiveSupport::TestCase
     assert @employee.valid?
   end
 
-  # FIRST NAME
+  # Testing First Name validations 
   test "first_name must be present" do
     @employee.first_name = ""
     assert_not @employee.valid?
@@ -24,7 +24,7 @@ class EmployeeTest < ActiveSupport::TestCase
     assert_not @employee.valid?
   end
 
-  # LAST NAME
+  # Testing Second Name validations 
   test "last_name must be present" do
     @employee.last_name = ""
     assert_not @employee.valid?
@@ -37,7 +37,7 @@ class EmployeeTest < ActiveSupport::TestCase
     assert_not @employee.valid?
   end
 
-  # EMAIL
+  # Testing Email validations 
   test "email must be present" do
     @employee.email = ""
     assert_not @employee.valid?
@@ -49,26 +49,26 @@ class EmployeeTest < ActiveSupport::TestCase
     assert_not duplicate.valid?
   end
 
-  # PHONE
+  # Testing Phone validations 
   test "phone must be present" do
     @employee.phone = ""
     assert_not @employee.valid?
   end
 
 
-  # POSITION
+ # Testing Position validations 
   test "position must be present" do
     @employee.position = ""
     assert_not @employee.valid?
   end
 
-  # DEPARTMENT
+  # Testing Department validations 
   test "department must be present" do
     @employee.department = ""
     assert_not @employee.valid?
   end
 
-  # GENDER
+  # Testing Gender validations 
   test "gender must be valid" do
     @employee.gender = "Unknown"
     assert_not @employee.valid?
@@ -78,7 +78,7 @@ class EmployeeTest < ActiveSupport::TestCase
     end
   end
 
-  # HIRE DATE
+  # Testing Hire date  validations 
   test "hire_date should not be in the future" do
     @employee.hire_date = Date.tomorrow
     assert_not @employee.valid?
