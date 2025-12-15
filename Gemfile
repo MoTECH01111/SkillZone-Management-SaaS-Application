@@ -16,8 +16,8 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # RAILS INFRASTRUCTURE
 # Database-backed caching, jobs, and Action Cable
-gem "solid_cache"
-gem "solid_queue"
+# gem "solid_cache"
+# gem "solid_queue"
 # gem "solid_cable"
 
 # Faster boot times
