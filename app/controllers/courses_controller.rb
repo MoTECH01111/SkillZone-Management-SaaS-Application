@@ -1,21 +1,25 @@
-class CoursesController < ApplicationController
-  before_action :set_course, only: [:show, :update, :destroy, :enroll]
-  before_action :require_admin, except: [:index, :show, :enroll]
+class CoursesController < ApplicationController # Course Controller API for function control
+  before_action :set_course, only: [:show, :update, :destroy]
+  before_action :require_admin, except: [:index, :show]
 
   # GET /courses
+  # Employees and Admins can see all courses
   def index
     courses = Course.all
     render json: courses, status: :ok
   end
 
   # GET /courses/:id
+  # Employees and Admins can view one course
   def show
     render json: @course, status: :ok
   end
 
   # POST /courses
+  # Admin only can create a new course
   def create
     course = Course.new(course_params)
+
     if course.save
       render json: course, status: :created
     else
@@ -24,6 +28,7 @@ class CoursesController < ApplicationController
   end
 
   # PATCH/PUT /courses/:id
+  # Admin only can  Update a course
   def update
     if @course.update(course_params)
       render json: @course, status: :ok
@@ -33,41 +38,36 @@ class CoursesController < ApplicationController
   end
 
   # DELETE /courses/:id
+  # Admin can only delete a course
   def destroy
     @course.destroy
     head :no_content
   end
 
-  # POST /courses/:id/enroll
-  def enroll
-    # Ensure only employees (non-admins) can enroll
-    if current_employee&.admin?
-      render json: { error: "Admins cannot enroll in courses." }, status: :forbidden
-      return
-    end
-
-    enrollment = Enrollment.new(employee_id: current_employee.id, course_id: @course.id)
-
-    if enrollment.save
-      render json: { message: "Successfully enrolled in #{@course.title}" }, status: :created
-    else
-      render json: { errors: enrollment.errors.full_messages }, status: :unprocessable_entity
-    end
-  end
-
+  # Private helper
   private
 
+  # Assigns the selected course
   def set_course
-    @course = Course.find(params[:id])
-  end
+    @course = Course.find_by(id: params[:id])
 
-  def course_params
-    params.require(:course).permit(:title, :duration_minutes, :capacity, :level, :start_date, :end_date)
-  end
-
-  def require_admin
-    unless current_employee&.admin?
-      render json: { error: "Access denied. Admins only." }, status: :forbidden
+    unless @course
+      render json: { error: "Course not found" }, status: :not_found
     end
+  end
+
+  # Strong parameters
+  def course_params
+    params.require(:course).permit(
+      :title,
+      :description,
+      :duration_minutes,
+      :capacity,
+      :level,
+      :start_date,
+      :end_date,
+      :youtube_url,
+      :department 
+    )
   end
 end

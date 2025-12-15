@@ -5,7 +5,7 @@ class Certificate < ApplicationRecord # Certificate model
   # Declaring that model accepts a pdf
   has_one_attached :document
 
-  # VALIDATIONS
+  # 6 VALIDATIONS
 
   # All these fields need to pesent for the certificate to be stored
   validates :name,       presence: true
