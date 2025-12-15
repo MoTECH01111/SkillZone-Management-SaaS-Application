@@ -4,7 +4,8 @@ certificate_morris_ruby:
   employee: morris
   course: ruby_course
   name: "Ruby Basics Completion"
-  issued_on: 2025-10-30   
+  description: "Certificate awarded for completing Ruby Basics"
+  issued_on: 2025-10-30
   expiry_date: 2026-10-30
   issuer: SkillZone
   notes: "Completed with distinction"

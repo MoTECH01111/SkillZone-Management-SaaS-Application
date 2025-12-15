@@ -4,8 +4,10 @@ ruby_course:
   duration_minutes: 120
   level: "Beginner"
   capacity: 30
+  department: "Engineering"
   start_date: 2025-11-01
   end_date: 2025-11-30
+
 
 js_course:
   title: "JavaScript Essentials"
@@ -21,6 +23,7 @@ sample_course:
   title: "Ruby Basics"
   description: "Intro to Ruby"
   duration_minutes: 120
+  department: "Cloud"
   level: "Beginner"
   capacity: 20
   start_date: <%= Date.today - 1.month %>
