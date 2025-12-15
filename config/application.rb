@@ -8,6 +8,8 @@ module SkillzoneApi
     config.load_defaults 8.0
     config.autoload_lib(ignore: %w[assets tasks])
     config.api_only = true
+    config.action_cable.mount_path = nil
+    config.action_cable.url = nil
 
     # Allows PDF to load from localhost:5000
     config.action_dispatch.default_headers.merge!({

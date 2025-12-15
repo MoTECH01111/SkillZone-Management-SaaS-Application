@@ -270,11 +270,6 @@ GEM
     ruby-progressbar (1.13.0)
     ruby2_keywords (0.0.5)
     securerandom (0.4.1)
-    solid_cable (3.0.12)
-      actioncable (>= 7.2)
-      activejob (>= 7.2)
-      activerecord (>= 7.2)
-      railties (>= 7.2)
     solid_cache (1.0.8)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -336,7 +331,6 @@ DEPENDENCIES
   rack-cors
   rails (~> 8.0.4)
   rubocop-rails-omakase
-  solid_cable
   solid_cache
   solid_queue
   thruster

@@ -18,7 +18,7 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Database-backed caching, jobs, and Action Cable
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_cable"
+# gem "solid_cable"
 
 # Faster boot times
 gem "bootsnap", require: false
