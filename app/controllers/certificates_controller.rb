@@ -1,6 +1,6 @@
 class CertificatesController < ApplicationController # Cerificate Controller API for function control
-  before_action :set_certificate, only: [:show, :update, :destroy] # Load all certificates for show ,update and destoy functions
-  before_action :require_admin, only: [:create, :update, :destroy]
+  before_action :set_certificate, only: [ :show, :update, :destroy ] # Load all certificates for show ,update and destoy functions
+  before_action :require_admin, only: [ :create, :update, :destroy ]
 
   # GET /certificates Retrieves all certificare assiocated with employee and course
   def index
@@ -8,11 +8,11 @@ class CertificatesController < ApplicationController # Cerificate Controller API
 
     render json: certificates.as_json( # Render all certificates in JSON format
       include: {
-        employee: { only: [:id, :first_name, :last_name, :email] },
-        course:   { only: [:id, :title, :level] }
+        employee: { only: [ :id, :first_name, :last_name, :email ] },
+        course:   { only: [ :id, :title, :level ] }
       },
-      methods: [:document_url], # retrieves document for file URL from active storage
-      except: [:created_at, :updated_at]
+      methods: [ :document_url ], # retrieves document for file URL from active storage
+      except: [ :created_at, :updated_at ]
     ), status: :ok
   end
 
@@ -20,11 +20,11 @@ class CertificatesController < ApplicationController # Cerificate Controller API
   def show
     render json: @certificate.as_json(
       include: {
-        employee: { only: [:id, :first_name, :last_name, :email] },
-        course:   { only: [:id, :title, :level] }
+        employee: { only: [ :id, :first_name, :last_name, :email ] },
+        course:   { only: [ :id, :title, :level ] }
       },
-      methods: [:document_url], # retrieve document for file URL from active storage
-      except: [:created_at, :updated_at]
+      methods: [ :document_url ], # retrieve document for file URL from active storage
+      except: [ :created_at, :updated_at ]
     ), status: :ok
   end
 
@@ -35,8 +35,8 @@ class CertificatesController < ApplicationController # Cerificate Controller API
 
     if certificate.save
       render json: certificate.as_json(
-        methods: [:document_url],
-        except: [:created_at, :updated_at]
+        methods: [ :document_url ],
+        except: [ :created_at, :updated_at ]
       ), status: :created
     else
       render json: { errors: certificate.errors.full_messages }, status: :unprocessable_entity
@@ -50,12 +50,12 @@ class CertificatesController < ApplicationController # Cerificate Controller API
 
     if @certificate.save
       render json: @certificate.as_json(
-        methods: [:document_url],
-        except: [:created_at, :updated_at]
+        methods: [ :document_url ],
+        except: [ :created_at, :updated_at ]
       ), status: :ok
     else
       render json: { errors: @certificate.errors.full_messages }, status: :unprocessable_entity # Throw erros if creation has failed
-    end 
+    end
   end
 
   # DELETE /certificates/:id
@@ -66,7 +66,7 @@ class CertificatesController < ApplicationController # Cerificate Controller API
 
   private # Priavte helper
 
-  def set_certificate #Finds the certificate specified by the URL Param
+  def set_certificate # Finds the certificate specified by the URL Param
     @certificate = Certificate.find(params[:id])
   end
 

@@ -1,5 +1,5 @@
 class EnrollmentsController < ApplicationController # Enrollment API Controller for function control
-  before_action :set_enrollment, only: [:show, :update, :destroy]
+  before_action :set_enrollment, only: [ :show, :update, :destroy ]
 
   # GET /enrollments set access for all enrollments
   def index
@@ -7,8 +7,8 @@ class EnrollmentsController < ApplicationController # Enrollment API Controller 
 
     render json: @enrollments.as_json(
       include: {
-        employee: { only: [:id, :first_name, :last_name, :email] },
-        course:   { only: [:id, :title, :description] }
+        employee: { only: [ :id, :first_name, :last_name, :email ] },
+        course:   { only: [ :id, :title, :description ] }
       },
       only: [
         :id,
@@ -25,8 +25,8 @@ class EnrollmentsController < ApplicationController # Enrollment API Controller 
   def show
     render json: @enrollment.as_json(
       include: {
-        employee: { only: [:id, :first_name, :last_name, :email] },
-        course:   { only: [:id, :title, :description] }
+        employee: { only: [ :id, :first_name, :last_name, :email ] },
+        course:   { only: [ :id, :title, :description ] }
       },
       only: [
         :id,
@@ -46,8 +46,8 @@ class EnrollmentsController < ApplicationController # Enrollment API Controller 
     if @enrollment.save
       render json: @enrollment.as_json(
         include: {
-          employee: { only: [:id, :first_name, :last_name, :email] },
-          course:   { only: [:id, :title, :description] }
+          employee: { only: [ :id, :first_name, :last_name, :email ] },
+          course:   { only: [ :id, :title, :description ] }
         },
         only: [
           :id,
@@ -68,8 +68,8 @@ class EnrollmentsController < ApplicationController # Enrollment API Controller 
     if @enrollment.update(enrollment_params)
       render json: @enrollment.as_json(
         include: {
-          employee: { only: [:id, :first_name, :last_name, :email] },
-          course:   { only: [:id, :title, :description] }
+          employee: { only: [ :id, :first_name, :last_name, :email ] },
+          course:   { only: [ :id, :title, :description ] }
         },
         only: [
           :id,
@@ -93,7 +93,7 @@ class EnrollmentsController < ApplicationController # Enrollment API Controller 
 
   private # Private helper
 
-  def set_enrollment # Assigns enrollment 
+  def set_enrollment # Assigns enrollment
     @enrollment = Enrollment.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Enrollment not found" }, status: :not_found

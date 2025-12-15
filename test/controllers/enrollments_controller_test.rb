@@ -1,7 +1,7 @@
 require "test_helper"
 
-class EnrollmentsControllerTest < ActionDispatch::IntegrationTest # Test for Enrollment Controller 
-  setup do # Fixtures used to set up test data 
+class EnrollmentsControllerTest < ActionDispatch::IntegrationTest # Test for Enrollment Controller
+  setup do # Fixtures used to set up test data
     @admin = employees(:manager)
     @non_admin = employees(:developer)
     @employee = employees(:john)
@@ -12,7 +12,7 @@ class EnrollmentsControllerTest < ActionDispatch::IntegrationTest # Test for Enr
     @enrollment = enrollments(:active_enrollment)
   end
 
-  # Helper for login 
+  # Helper for login
   def login_as(employee)
     EnrollmentsController.any_instance.stubs(:current_employee).returns(employee)
   end
@@ -57,7 +57,7 @@ class EnrollmentsControllerTest < ActionDispatch::IntegrationTest # Test for Enr
     assert_response :created
   end
 
-  
+
   # UPDATE Tesing that enrollmnnts can be updated
   test "should update enrollment" do
     patch enrollment_url(@enrollment), params: {

@@ -1,12 +1,12 @@
 require "test_helper"
 
-class CoursesControllerTest < ActionDispatch::IntegrationTest # Testing Course Controller 
+class CoursesControllerTest < ActionDispatch::IntegrationTest # Testing Course Controller
   setup do # Setup test data with fictures
     @course = courses(:sample_course)   # existing course fixture
     @admin  = employees(:manager)       # is_admin: true
     @user   = employees(:john)          # is_admin: false
   end
- 
+
   # Testing access to all courses
   test "should get index" do
     get courses_url, as: :json
@@ -49,7 +49,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest # Testing Course C
     assert_equal "New Leadership Course", json["title"]
   end
 
-  # Testing that course should not create with invalid data 
+  # Testing that course should not create with invalid data
   test "should not create course with invalid data" do
     CoursesController.any_instance.stubs(:current_employee).returns(@admin)
 
@@ -99,7 +99,7 @@ class CoursesControllerTest < ActionDispatch::IntegrationTest # Testing Course C
     assert_response :no_content
   end
 
-  # Testing non admin functionalities 
+  # Testing non admin functionalities
   test "non-admin should not be allowed to create, update, or delete" do
     CoursesController.any_instance.stubs(:current_employee).returns(@user)
 

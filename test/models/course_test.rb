@@ -23,7 +23,7 @@ class CourseTest < ActiveSupport::TestCase # Testing course models
     @course.duration_minutes = nil
     assert_not @course.valid?, "Duration can't be nil"
   end
- # Testing duration minutes be + number
+  # Testing duration minutes be + number
   test "duration_minutes must be positive" do
     @course.duration_minutes = 0
     assert_not @course.valid?, "Duration must be greater than 0"
@@ -36,7 +36,7 @@ class CourseTest < ActiveSupport::TestCase # Testing course models
     @course.capacity = nil
     assert_not @course.valid?, "Capacity can't be nil"
   end
- # Testing capacity must be a positive number 
+  # Testing capacity must be a positive number
   test "capacity must be positive" do
     @course.capacity = 0
     assert_not @course.valid?, "Capacity must be greater than 0"
@@ -44,17 +44,17 @@ class CourseTest < ActiveSupport::TestCase # Testing course models
     assert_not @course.valid?, "Negative capacity should be invalid"
   end
 
-  # Testing start date must be present  
+  # Testing start date must be present
   test "start_date must be present" do
     @course.start_date = nil
     assert_not @course.valid?, "Start date can't be blank"
   end
- # Testing end date must be present  
+  # Testing end date must be present
   test "end_date must be present" do
     @course.end_date = nil
     assert_not @course.valid?, "End date can't be blank"
   end
-   # Testing end date be after start date 
+  # Testing end date be after start date
   test "end_date must be after start_date" do
     @course.start_date = Date.today
     @course.end_date = Date.yesterday

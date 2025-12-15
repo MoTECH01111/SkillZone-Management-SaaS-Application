@@ -23,7 +23,7 @@ class Certificate < ApplicationRecord # Certificate model
   # Must attach PDF
   validate :document_must_be_attached
 
-  # Url Helper 
+  # Url Helper
   # This allows frontend to access PDF file
   def document_url
     return nil unless document.attached?
@@ -38,8 +38,8 @@ class Certificate < ApplicationRecord # Certificate model
     # Prepend full absolute URL
     "http://localhost:3000#{path}"
   end
-  
-  # Private helper 
+
+  # Private helper
   private
 
   # Issued date cannot be cannot be in the fute

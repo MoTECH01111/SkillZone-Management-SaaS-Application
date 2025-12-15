@@ -11,8 +11,8 @@ module SkillzoneApi
 
     # Allows PDF to load from localhost:5000
     config.action_dispatch.default_headers.merge!({
-      'X-Frame-Options' => 'ALLOWALL',
-      'Access-Control-Allow-Origin' => '*'
+      "X-Frame-Options" => "ALLOWALL",
+      "Access-Control-Allow-Origin" => "*"
     })
   end
 end

@@ -11,7 +11,7 @@ class EmployeeTest < ActiveSupport::TestCase # Unit test for  employee model
     assert @employee.valid?
   end
 
-  # Testing First Name validations 
+  # Testing First Name validations
   test "first_name must be present" do
     @employee.first_name = ""
     assert_not @employee.valid?
@@ -24,7 +24,7 @@ class EmployeeTest < ActiveSupport::TestCase # Unit test for  employee model
     assert_not @employee.valid?
   end
 
-  # Testing Second Name validations 
+  # Testing Second Name validations
   test "last_name must be present" do
     @employee.last_name = ""
     assert_not @employee.valid?
@@ -37,7 +37,7 @@ class EmployeeTest < ActiveSupport::TestCase # Unit test for  employee model
     assert_not @employee.valid?
   end
 
-  # Testing Email validations 
+  # Testing Email validations
   test "email must be present" do
     @employee.email = ""
     assert_not @employee.valid?
@@ -49,26 +49,26 @@ class EmployeeTest < ActiveSupport::TestCase # Unit test for  employee model
     assert_not duplicate.valid?
   end
 
-  # Testing Phone validations 
+  # Testing Phone validations
   test "phone must be present" do
     @employee.phone = ""
     assert_not @employee.valid?
   end
 
 
- # Testing Position validations 
+  # Testing Position validations
   test "position must be present" do
     @employee.position = ""
     assert_not @employee.valid?
   end
 
-  # Testing Department validations 
+  # Testing Department validations
   test "department must be present" do
     @employee.department = ""
     assert_not @employee.valid?
   end
 
-  # Testing Gender validations 
+  # Testing Gender validations
   test "gender must be valid" do
     @employee.gender = "Unknown"
     assert_not @employee.valid?
@@ -78,7 +78,7 @@ class EmployeeTest < ActiveSupport::TestCase # Unit test for  employee model
     end
   end
 
-  # Testing Hire date  validations 
+  # Testing Hire date  validations
   test "hire_date should not be in the future" do
     @employee.hire_date = Date.tomorrow
     assert_not @employee.valid?

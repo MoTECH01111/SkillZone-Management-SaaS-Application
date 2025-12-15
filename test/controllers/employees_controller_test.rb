@@ -1,6 +1,6 @@
 require "test_helper"
 
-class EmployeesControllerTest < ActionDispatch::IntegrationTest # Testing for the employee controller 
+class EmployeesControllerTest < ActionDispatch::IntegrationTest # Testing for the employee controller
   setup do # test data using fixtures
     @admin = employees(:manager)
     @non_admin = employees(:developer)
@@ -21,9 +21,9 @@ class EmployeesControllerTest < ActionDispatch::IntegrationTest # Testing for th
 
   test "should NOT get index as non-admin" do # non - Admin cannot view all employees
     get employees_url(auth_query(@non_admin)), as: :json
- 
+
     assert_response :forbidden # Expect forbidden acces
-    json = JSON.parse(@response.body) 
+    json = JSON.parse(@response.body)
     assert_equal "Admins only", json["error"]
   end
 
@@ -49,7 +49,7 @@ class EmployeesControllerTest < ActionDispatch::IntegrationTest # Testing for th
             position:    "Engineer",
             department:  "IT",
             gender:      "Male",
-            hire_date:   "2024-01-01",
+            hire_date:   "2024-01-01"
           }
         },
         as: :json
@@ -88,7 +88,7 @@ class EmployeesControllerTest < ActionDispatch::IntegrationTest # Testing for th
     json = JSON.parse(@response.body)
     assert_equal "Access denied", json["error"]
   end
-  
+
   # Testing for DESTROY functions
   test "should destroy employee as admin" do
     assert_difference("Employee.count", -1) do

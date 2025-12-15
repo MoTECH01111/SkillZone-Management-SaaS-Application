@@ -4,7 +4,7 @@ source "https://rubygems.org"
 # Rails framework
 gem "rails", "~> 8.0.4"
 
-# PostgreSQL 
+# PostgreSQL
 gem "pg", "~> 1.1"
 
 # Puma web server

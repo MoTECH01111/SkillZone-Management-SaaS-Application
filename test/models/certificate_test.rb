@@ -1,7 +1,7 @@
 require "test_helper"
 
 class CertificateTest < ActiveSupport::TestCase # Test for Certificate model
-  fixtures :certificates, :employees, :courses # Import fixtures 
+  fixtures :certificates, :employees, :courses # Import fixtures
 
  def setup
   @certificate = certificates(:certificate_morris_ruby) # Declare fixture for load test data
@@ -23,7 +23,7 @@ end
     @certificate.issued_on = Date.tomorrow
     assert_not @certificate.valid?, "issued_on in the future should be invalid"
   end
-   # Test to ensure expiry date is not before the issue
+  # Test to ensure expiry date is not before the issue
   test "expiry_date should be after issued_on" do
     @certificate.expiry_date = @certificate.issued_on - 1
     assert_not @certificate.valid?, "expiry_date before issued_on should be invalid"

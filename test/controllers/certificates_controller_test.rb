@@ -39,7 +39,7 @@ class CertificatesControllerTest < ActionDispatch::IntegrationTest # Testing the
       post certificates_url, params: {
         certificate: {
           name: "New Certificate",
-          description: "Issued for course completion",  
+          description: "Issued for course completion",
           issued_on: Date.today - 1.week,
           expiry_date: Date.today + 1.year,
           employee_id: @employee.id,
@@ -73,8 +73,8 @@ class CertificatesControllerTest < ActionDispatch::IntegrationTest # Testing the
     patch certificate_url(@certificate), params: {
       certificate: {
         name: "Updated Certificate",
-        description: "Updated description",     
-        issued_on: @certificate.issued_on,        
+        description: "Updated description",
+        issued_on: @certificate.issued_on,
         expiry_date: @certificate.expiry_date,
         employee_id: @certificate.employee_id,
         course_id: @certificate.course_id,
@@ -117,7 +117,7 @@ class CertificatesControllerTest < ActionDispatch::IntegrationTest # Testing the
     assert_response :forbidden
   end
 
-    # Testing NON ADMIN cannot update certicates
+  # Testing NON ADMIN cannot update certicates
   test "non-admin should not update certificate" do
     login_as(@non_admin)
     patch certificate_url(@certificate), params: { certificate: { name: "Fail" } }, as: :multipart

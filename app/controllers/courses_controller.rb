@@ -1,6 +1,6 @@
 class CoursesController < ApplicationController # Course Controller API for function control
-  before_action :set_course, only: [:show, :update, :destroy]
-  before_action :require_admin, except: [:index, :show]
+  before_action :set_course, only: [ :show, :update, :destroy ]
+  before_action :require_admin, except: [ :index, :show ]
 
   # GET /courses
   # Employees and Admins can see all courses
@@ -67,7 +67,7 @@ class CoursesController < ApplicationController # Course Controller API for func
       :start_date,
       :end_date,
       :youtube_url,
-      :department 
+      :department
     )
   end
 end

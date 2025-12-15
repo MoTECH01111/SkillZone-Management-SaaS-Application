@@ -3,5 +3,3 @@ class AddYoutubeUrlToCourses < ActiveRecord::Migration[8.0]
     add_column :courses, :youtube_url, :string
   end
 end
-
-
