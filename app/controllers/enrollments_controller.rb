@@ -1,106 +1,114 @@
-class EnrollmentsController < ApplicationController
-  before_action :set_enrollment, only: [ :show, :update, :destroy ]
-  before_action :authorize_action, only: [ :create, :update, :destroy ]
+class EnrollmentsController < ApplicationController # Enrollment API Controller for function control
+  before_action :set_enrollment, only: [:show, :update, :destroy]
 
-  # GET /enrollments
+  # GET /enrollments set access for all enrollments
   def index
-    @enrollments =
-      if current_employee&.admin?
-        Enrollment.includes(:employee, :course).all
-      else
-        Enrollment.includes(:employee, :course).where(employee_id: current_employee.id)
-      end
+    @enrollments = Enrollment.includes(:employee, :course).all
 
     render json: @enrollments.as_json(
       include: {
-        employee: { only: [ :id, :first_name, :last_name, :email ] },
-        course: { only: [ :id, :title, :description ] }
+        employee: { only: [:id, :first_name, :last_name, :email] },
+        course:   { only: [:id, :title, :description] }
       },
-      except: [ :created_at, :updated_at ]
+      only: [
+        :id,
+        :status,
+        :progress,
+        :completed_on,
+        :enrolled_on,
+        :grade
+      ]
     )
   end
 
-  # GET /enrollments/:id
+  # GET /enrollments/:id This displays all courses
   def show
-    if current_employee&.admin? || @enrollment.employee_id == current_employee&.id
-      render json: @enrollment.as_json(
-        include: {
-          employee: { only: [ :id, :first_name, :last_name, :email ] },
-          course: { only: [ :id, :title, :description ] }
-        },
-        except: [ :created_at, :updated_at ]
-      )
-    else
-      render json: { error: "Access denied." }, status: :forbidden
-    end
+    render json: @enrollment.as_json(
+      include: {
+        employee: { only: [:id, :first_name, :last_name, :email] },
+        course:   { only: [:id, :title, :description] }
+      },
+      only: [
+        :id,
+        :status,
+        :progress,
+        :completed_on,
+        :enrolled_on,
+        :grade
+      ]
+    )
   end
 
-  # POST /enrollments
+  # POST /enrollments Allows employee to enroll into a course
   def create
     @enrollment = Enrollment.new(enrollment_params)
-
-    # Employees can only create their own enrollment
-    unless current_employee&.admin? || @enrollment.employee_id == current_employee&.id
-      return render json: { error: "You can only enroll yourself." }, status: :forbidden
-    end
 
     if @enrollment.save
       render json: @enrollment.as_json(
         include: {
-          employee: { only: [ :id, :first_name, :last_name, :email ] },
-          course: { only: [ :id, :title, :description ] }
-        }
+          employee: { only: [:id, :first_name, :last_name, :email] },
+          course:   { only: [:id, :title, :description] }
+        },
+        only: [
+          :id,
+          :status,
+          :progress,
+          :completed_on,
+          :enrolled_on,
+          :grade
+        ]
       ), status: :created
     else
       render json: { errors: @enrollment.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /enrollments/:id
+  # PATCH/PUT /enrollments/:id Allows employee to update their enrollment
   def update
-    # Employee can only update their own enrollment
-    unless current_employee&.admin? || @enrollment.employee_id == current_employee&.id
-      return render json: { error: "Access denied." }, status: :forbidden
-    end
-
     if @enrollment.update(enrollment_params)
       render json: @enrollment.as_json(
         include: {
-          employee: { only: [ :id, :first_name, :last_name, :email ] },
-          course: { only: [ :id, :title, :description ] }
-        }
-      ), status: :ok
+          employee: { only: [:id, :first_name, :last_name, :email] },
+          course:   { only: [:id, :title, :description] }
+        },
+        only: [
+          :id,
+          :status,
+          :progress,
+          :completed_on,
+          :enrolled_on,
+          :grade
+        ]
+      )
     else
       render json: { errors: @enrollment.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
-  # DELETE /enrollments/:id
+  # DELETE /enrollments/:id This function allows employee to delete enrollments
   def destroy
-    # Only admins can delete enrollments
-    unless current_employee&.admin?
-      return render json: { error: "Only admins can delete enrollments." }, status: :forbidden
-    end
-
     @enrollment.destroy
     head :no_content
   end
 
-  private
+  private # Private helper
 
-  def set_enrollment
+  def set_enrollment # Assigns enrollment 
     @enrollment = Enrollment.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     render json: { error: "Enrollment not found" }, status: :not_found
   end
 
+  # Strong parameters
   def enrollment_params
-    params.require(:enrollment).permit(:employee_id, :course_id, :status, :progress, :completed_on)
-  end
-
-  def authorize_action
-    return if current_employee.present?
-
-    render json: { error: "You must be logged in." }, status: :unauthorized
+    params.require(:enrollment).permit(
+      :employee_id,
+      :course_id,
+      :status,
+      :progress,
+      :completed_on,
+      :grade,
+      :enrolled_on
+    )
   end
 end

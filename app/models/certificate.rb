@@ -1,11 +1,11 @@
 class Certificate < ApplicationRecord # Certificate model
-  # ASSOCIATIONS this model is need for both course and employee
+  #  Associations this model is needed for both course and employee
   belongs_to :employee
   belongs_to :course
   # Declaring that model accepts a pdf
   has_one_attached :document
 
-  # 6 VALIDATIONS
+  # 6 Validations
 
   # All these fields need to pesent for the certificate to be stored
   validates :name,       presence: true
