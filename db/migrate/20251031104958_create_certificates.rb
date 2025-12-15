@@ -13,5 +13,3 @@ class CreateCertificates < ActiveRecord::Migration[8.0]
     end
   end
 end
-rails generate migration AddDescriptionTocertificates description:text
-rails db:migrate
