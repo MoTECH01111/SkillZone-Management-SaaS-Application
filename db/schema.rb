@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_31_205736) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_23_210215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -52,6 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_31_205736) do
     t.datetime "updated_at", null: false
     t.string "name"
     t.date "expiry_date"
+    t.text "description"
     t.index ["course_id"], name: "index_certificates_on_course_id"
     t.index ["employee_id"], name: "index_certificates_on_employee_id"
   end
@@ -66,6 +67,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_31_205736) do
     t.datetime "updated_at", null: false
     t.date "start_date"
     t.date "end_date"
+    t.string "youtube_url"
+    t.string "department"
   end
 
   create_table "employees", force: :cascade do |t|

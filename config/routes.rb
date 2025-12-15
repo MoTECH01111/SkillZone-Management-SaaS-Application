@@ -1,19 +1,21 @@
-Rails.application.routes.draw do
-  # Custom employee lookup
+Rails.application.routes.draw do #Defines all HTTP routes 
+  # Custom GET route to retrieve employee email
   get '/employees/find_by_email', to: 'employees#find_by_email'
 
-  # Employee management
-  resources :employees
-
-  # Courses: employees can view, admins can create/update/delete
+  # Creates the standard routes index, show, create,update,destroy
+  resources :employees do
+    collection do.   # Creates a custom collection Route
+      post :login
+    end
+  end
+  #  Creates Courses routes Create, view, update, and delete courses
   resources :courses do
-    # Employees can view or create enrollments for a specific course
-    resources :enrollments, only: [:index, :create], shallow: true
+    # Nested enrollments
+    resources :enrollments, only: [:index, :create, :show, :update, :destroy]
   end
 
-  # Standalone enrollments for admins to manage any enrollment
-  resources :enrollments, only: [:show, :update, :destroy]
+  resources :enrollments # Enrollments routes index, show, create,update,destroy
 
-  # Certificates: admins create/update/delete, employees view
-  resources :certificates, only: [:index, :show, :create, :update, :destroy]
+  # Certificates routes index, show, create,update,destroy
+  resources :certificates
 end
