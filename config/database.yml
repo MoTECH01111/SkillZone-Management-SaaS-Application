@@ -22,4 +22,5 @@ test:
 
 # Production environment (Render)
 production:
-  url: <%= ENV.fetch("DATABASE_URL") %>
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
