@@ -112,8 +112,8 @@ class EmployeesController < ApplicationController # Employee Controller API for 
   end
 
   # Strong parameters
-  def employee_params
-    params.require(:employee).permit(
+ def employee_params
+    permitted = [
       :first_name,
       :last_name,
       :email,
@@ -121,8 +121,12 @@ class EmployeesController < ApplicationController # Employee Controller API for 
       :position,
       :department,
       :gender,
-      :hire_date,
-      :admin
-    )
+      :hire_date
+    ]
+
+    # Only allow admin flag if current user is an admin
+    permitted << :admin if @current_employee&.admin?
+
+    params.require(:employee).permit(permitted)
   end
 end
