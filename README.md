@@ -61,6 +61,7 @@ Ensure the following are installed:
 Before Initialization of the frontend enter this URL in your browser to reploy the application 
 
 ## Frontend Standalone repository: https://github.com/MoTECH01111/SkillZone_Frontend
+ - When the API has been deployed you will see {Admin Only}
  
 ## Backend Setup Rails API
 
