@@ -21,7 +21,6 @@ gem "kamal", require: false
 # Puma acceleration / HTTP optimizations
 gem "thruster", require: false
 
-
 # Enable Cross-Origin Resource Sharing Flask
 gem "rack-cors"
 # DEVELOPMENT & TEST
