@@ -28,16 +28,21 @@ class Certificate < ApplicationRecord # Certificate model
   def document_url
     return nil unless document.attached?
 
-    # Get the ActiveStorage path
+    host =
+      if Rails.env.production?
+        "https://skillzone-api.onrender.com"
+      else
+        "http://localhost:3000"
+      end
+
     path = Rails.application.routes.url_helpers.rails_blob_path(
       document,
       disposition: "inline",
       only_path: true
     )
 
-    # Prepend full absolute URL
-    "http://localhost:3000#{path}"
-  end
+    "#{host}#{path}"
+end
 
   # Private helper
   private
