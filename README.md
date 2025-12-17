@@ -12,7 +12,7 @@ The system follows a decoupled architecture consisting of:
 
 ---
 
-## Core Features (CRUD Functionality)
+## Core Features CRUD 
 
 - **Employees (Admins only)**
   - Create, update, view, and delete employee records
@@ -34,12 +34,12 @@ The system follows a decoupled architecture consisting of:
 
 ## Technology Stack
 
-- **Backend:** Ruby on Rails (API-only)
-- **Database:** PostgreSQL
-- **File Storage:** Rails Active Storage
-- **Testing:** Minitest (Rails)
-- **CI/CD:** GitHub Actions
-- **Deployment:** Render
+  - **Backend:** Ruby on Rails (API-only)
+  - **Database:** PostgreSQL
+  - **File Storage:** Rails Active Storage
+  - **Testing:** Minitest (Rails)
+  - **CI/CD:** GitHub Actions
+  - **Deployment:** Render
 
 ---
 
@@ -50,7 +50,6 @@ Ensure the following are installed:
 - Ruby (version specified in `.ruby-version`)
 - Rails
 - PostgreSQL
-- Python 3
 - Git
 - Bundler
 - pip / virtualenv
@@ -59,10 +58,11 @@ Ensure the following are installed:
 
 ## Render Deployed URL https://skillzone-api.onrender.com/employees
 Before Initialization of the frontend enter this URL in your browser to reploy the application 
+---
 
 ## Frontend Standalone repository: https://github.com/MoTECH01111/SkillZone_Frontend
  - When the API has been deployed you will see {Admin Only}
- 
+--- 
 ## Backend Setup Rails API
 
 ```bash
